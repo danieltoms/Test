@@ -69,21 +69,10 @@ def RegularExpressions(new_password):
 def printarray(label, array):
      for x in array:
         print(label,x.get_username())
-        
-def stack_push(stack_array, stack_pointer, Data_Item):
-	stack_maximum = len(stack_array)
-	if stack_pointer < stack_maximum:
-		stack_pointer = stack_pointer +1
-		stack_array[stack_pointer] = Data_Item
-	else:print("Error -- data not saved stack full") 
- 	return stack_pointer
- 	
-def stack_pop(stack_array, stack_pointer, Data_Item):
-	if stack_pointer > 0:
-		Data_Item = stack_array[stack_pointer]
-		stack_pointer = stack_pointer - 1
-	else:print("Error -- There is no data to pop from the stack")
-	return data_item
+
+def stack_pop(stack_array):
+	for i in range (len(stack_array)):
+		print(stack_array.pop())
 	
 class Username:
 
@@ -127,27 +116,38 @@ if __name__ == "__main__":
 
 
 # Simple test to ensure database works with Username class
-    import sqlite3
-    Connection = sqlite3.connect('booking.db')
-    c = Connection.cursor()
-    test_array = []
-    SQL = "SELECT username,password FROM Usernames ORDER BY username"
-    for row in c.execute(SQL):
-        test_array.append(Username(row[0],row[1]))
-
-    Connection.commit()
-
-    for x in test_array:
-        print(x.get_username(), x.password)
+#     import sqlite3
+#     Connection = sqlite3.connect('booking.db')
+#     c = Connection.cursor()
+#     test_array = []
+#     SQL = "SELECT username,password FROM Usernames ORDER BY username"
+#     for row in c.execute(SQL):
+#         test_array.append(Username(row[0],row[1]))
+# 
+#     Connection.commit()
+# 
+#     for x in test_array:
+#         print(x.get_username(), x.password)
        
 # Simple test to ensure BinarySearch works with Username class
+#     
+#     username = "123"
+#     password = "$Password1"
+#     test_array = quicksort(test_array)
+#     i = BinarySearch(test_array, 0, len(test_array)-1, username)
+#     print(i) 
+#     if test_array[i].check_password(password):
+#         print("success")
+#     else:
+#         print("fail")
+
+    test_array = []
+    test_array.append(1)
+    test_array.append(2)
+    test_array.append(3)
     
-    username = "123"
-    password = "$Password1"
-    test_array = quicksort(test_array)
-    i = BinarySearch(test_array, 0, len(test_array)-1, username)
-    print(i) 
-    if test_array[i].check_password(password):
-        print("success")
-    else:
-        print("fail")
+    for i in test_array:
+    	print(test_array.pop())
+    
+    stack_pop(test_array)
+    	
