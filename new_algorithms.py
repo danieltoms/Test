@@ -69,8 +69,22 @@ def RegularExpressions(new_password):
 def printarray(label, array):
      for x in array:
         print(label,x.get_username())
-
-
+        
+def stack_push(stack_array, stack_pointer, Data_Item):
+	stack_maximum = len(stack_array)
+	if stack_pointer < stack_maximum:
+		stack_pointer = stack_pointer +1
+		stack_array[stack_pointer] = Data_Item
+	else:print("Error -- data not saved stack full") 
+ 	return stack_pointer
+ 	
+def stack_pop(stack_array, stack_pointer, Data_Item):
+	if stack_pointer > 0:
+		Data_Item = stack_array[stack_pointer]
+		stack_pointer = stack_pointer - 1
+	else:print("Error -- There is no data to pop from the stack")
+	return data_item
+	
 class Username:
 
     #constructor
