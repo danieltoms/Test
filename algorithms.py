@@ -74,8 +74,7 @@ def SaveUsernamesDatabase(usernames): #Save usernames to database
     for item in usernames:
         username = item.username #Updated to access class atributes
         password = item.password
-        admin = item.admin
-        c.execute("INSERT INTO Usernames VALUES ('%s', '%s', '%s')" % (username, password, admin,))
+        c.execute("INSERT INTO Usernames VALUES ('%s', '%s')" % (username, password))
         Connection.commit()
 
 """
