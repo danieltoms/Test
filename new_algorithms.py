@@ -70,9 +70,23 @@ def printarray(label, array):
      for x in array:
         print(label,x.get_username())
 
-def stack_pop(stack_array):
-	for i in range (len(stack_array)):
-		print(stack_array.pop())
+def stack(test_array):
+	StackMaximum = len(test_array)
+	StackArray = [0]*StackMaximum
+	StackPointer = 0
+	
+	if StackPointer < StackMaximum:
+		StackPointer = StackPointer + 1
+		StackArray[StackPointer] = test_array[StackPointer]
+	else: print("Data not saved -- stack full")
+	
+	if StackPointer > 0:
+		test_array[StackPointer] = StackArray[StackPointer]
+		StackPointer = StackPointer - 1
+	else: print("There is no data to pop from the stack")
+	
+# 	for i in range (len(stack_array)):
+# 		print(stack_array.pop())
 	
 class Username:
 
@@ -145,9 +159,7 @@ if __name__ == "__main__":
     test_array.append(1)
     test_array.append(2)
     test_array.append(3)
-    
-    for i in test_array:
-    	print(test_array.pop())
-    
-    stack_pop(test_array)
+    print(test_array)
+    stack(test_array)
+    print(test_array)
     	
