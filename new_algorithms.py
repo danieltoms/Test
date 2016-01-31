@@ -73,20 +73,24 @@ def printarray(label, array):
      for x in array:
         print(label,x.get_username())
 
+# Routine to push onto a stack
 def push_stack(Data_Item):
 	global StackMaximum
 	global StackPointer
-	
+# Check there is room on the stack 	
 	if StackPointer < StackMaximum:
+# Push onto the stack 		
 		StackPointer = StackPointer + 1
 		StackArray[StackPointer] = Data_Item
 	else: print("Data not saved -- stack full")
 
+# Routine to pop off the stack
 def pull_stack():
 	global StackPointer
-		
+# Check the stack is not empty 		
 	if StackPointer > 0:
 		DataItem = StackArray[StackPointer]
+# Decrease stack pointer 		
 		StackPointer = StackPointer - 1
 		return DataItem
 	else: print("There is no data to pop from the stack")
