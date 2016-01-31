@@ -1,6 +1,9 @@
 import re
 import random
 
+StackArray = [0]*10
+StackMaximum = 10
+StackPointer = 0
 
 def BubbleSort(my_list):
     for count in range (0, len(my_list)-1):
@@ -70,23 +73,24 @@ def printarray(label, array):
      for x in array:
         print(label,x.get_username())
 
-def stack(test_array):
-	StackMaximum = len(test_array)
-	StackArray = [0]*StackMaximum
-	StackPointer = 0
+def push_stack(Data_Item):
+	global StackMaximum
+	global StackPointer
 	
 	if StackPointer < StackMaximum:
 		StackPointer = StackPointer + 1
-		StackArray[StackPointer] = test_array[StackPointer]
+		StackArray[StackPointer] = Data_Item
 	else: print("Data not saved -- stack full")
-	
+
+def pull_stack():
+	global StackPointer
+		
 	if StackPointer > 0:
-		test_array[StackPointer] = StackArray[StackPointer]
+		DataItem = StackArray[StackPointer]
 		StackPointer = StackPointer - 1
+		return DataItem
 	else: print("There is no data to pop from the stack")
 	
-# 	for i in range (len(stack_array)):
-# 		print(stack_array.pop())
 	
 class Username:
 
@@ -160,6 +164,12 @@ if __name__ == "__main__":
     test_array.append(2)
     test_array.append(3)
     print(test_array)
-    stack(test_array)
+    
+    for i in range (len(test_array)):
+    	push_stack(test_array[i])
+    
+    for i in range (len(test_array)):
+    	test_array[i]= pull_stack()
+    	
     print(test_array)
     	
