@@ -2,7 +2,7 @@ import re
 import random
 
 StackArray = [0]*10
-StackMaximum = 10
+StackMaximum = len(StackArray)
 StackPointer = 0
 
 def BubbleSort(my_list):
