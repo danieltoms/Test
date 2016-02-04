@@ -1,8 +1,9 @@
 import re
 import random
+import csv
 
-StackArray = [0]*10
-StackMaximum = len(StackArray)
+StackArray = []
+StackMaximum = 0
 StackPointer = 0
 
 def BubbleSort(my_list):
@@ -75,27 +76,56 @@ def printarray(label, array):
 
 # Routine to push onto a stack
 def push_stack(Data_Item):
-	global StackMaximum
-	global StackPointer
+    global StackMaximum
+    global StackPointer
 # Check there is room on the stack 	
-	if StackPointer < StackMaximum:
-# Push onto the stack 		
-		StackPointer = StackPointer + 1
-		StackArray[StackPointer] = Data_Item
-	else: print("Data not saved -- stack full")
+    if StackPointer < StackMaximum:
+        StackPointer = StackPointer + 1
+        StackArray[StackPointer] = Data_Item
 
+    else: print("Data not saved -- stack full")
+    SaveStack()	
+    
 # Routine to pop off the stack
 def pull_stack():
-	global StackPointer
-# Check the stack is not empty 		
-	if StackPointer > 0:
-		DataItem = StackArray[StackPointer]
-# Decrease stack pointer 		
-		StackPointer = StackPointer - 1
-		return DataItem
-	else: print("There is no data to pop from the stack")
-	
-	
+    global StackPointer # Check the stack is not empty
+
+    if StackPointer >= 0:
+        DataItem = StackArray[StackPointer]
+        print("SP",StackPointer,"DI",DataItem)
+        StackPointer = StackPointer - 1 # Decrease stack pointer 
+        return DataItem
+    else: print("There is no data to pop from the stack")
+
+
+def LoadStack(): #load usernames from file
+    global StackMaximum
+    global StackPointer
+    del StackArray[:]
+    
+    with open('stack.csv', 'r') as csvfile:
+        reader = csv.reader(csvfile)
+        for line in reader:
+            StackPointer = int(line[0])
+            StackMaximum = int(line[1])
+            for count in range(2,StackMaximum + 2):
+                StackArray.append(line[count])
+    return StackMaximum, StackPointer
+    
+
+def SaveStack(): #load usernames from file
+    global StackMaximum
+    global StackPointer
+    line = []
+    with open('stack.csv', 'w') as csvfile:
+        writer = csv.writer(csvfile)
+        line.append(StackPointer)
+        line.append(StackMaximum)
+        for count in range(0,StackMaximum):
+            line.append(StackArray[count])
+        writer.writerow(line)
+
+
 class Username:
 
     #constructor
@@ -163,17 +193,20 @@ if __name__ == "__main__":
 #     else:
 #         print("fail")
 
-    test_array = []
-    test_array.append(1)
-    test_array.append(2)
-    test_array.append(3)
-    print(test_array)
-    
-    for i in range (len(test_array)):
-    	push_stack(test_array[i])
-    
-    for i in range (len(test_array)):
-    	test_array[i]= pull_stack()
-    	
-    print(test_array)
-    	
+# Simple test to test that the stack routines operate correctly
+##    test_array = []
+##    test_array.append(1)
+##    test_array.append(2)
+##    test_array.append(3)
+##    print(test_array)
+##    
+##    for i in range (len(test_array)):
+##    	push_stack(test_array[i])
+##    
+##    for i in range (len(test_array)):
+##    	test_array[i]= pull_stack()
+##    	
+##    print(test_array)
+
+    LoadStack()
+    SaveStack()	

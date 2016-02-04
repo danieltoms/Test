@@ -57,6 +57,7 @@ class loginWindow:
             
             if true_or_false:
                 messagebox.showinfo("Welcome", response[3])
+                push_stack(username)
                 self.root.destroy()
                 window = menuWindow()
 
@@ -96,11 +97,14 @@ class menuWindow:
         Label(self.root, text='3. Delete a user').grid(row=3, column=0, sticky=W)
         Button(self.root, text='Go', width=7, command=self.deleteUser).grid(row=3, column=1, sticky=W)
 
-        Label(self.root, text='4. Show an ordered list of users').grid(row=4, column=0, sticky=W)
-        Button(self.root, text='Go', width=7, command=self.showUser).grid(row=4, column=1, sticky=W)
+        Label(self.root, text='4. Login History').grid(row=4, column=0, sticky=W)
+        Button(self.root, text='Go', width=7, command=self.loginUser).grid(row=4, column=1, sticky=W)
 
-        Label(self.root, text='5. Show an ordered list of admins').grid(row=5, column=0, sticky=W)
+        Label(self.root, text='4. Show an ordered list of users').grid(row=5, column=0, sticky=W)
         Button(self.root, text='Go', width=7, command=self.showUser).grid(row=5, column=1, sticky=W)
+
+        Label(self.root, text='5. Show an ordered list of admins').grid(row=6, column=0, sticky=W)
+        Button(self.root, text='Go', width=7, command=self.showUser).grid(row=6, column=1, sticky=W)
 
     def addUser(self):
         newuser = AddUserDialog(self.root, title = "Add User")
@@ -128,13 +132,63 @@ class menuWindow:
                 
             
     def changeUser(self):
-        messagebox.showinfo("Change User", "Do you want to change your password?")
+        #This routine will update a users password, it uses a dialog box to get the username and two passwords
+        #If the user exists and the two passwords match the password is changed in both the database and the username object
+
+        newuser = ChangeUserDialog(self.root, title = "Change Password") #Creates a new instance of ChangeUserDialog
+
+        if newuser.result is not None: #In case cancel on dialog is pressed and no username or password is given
+            
+            #If username has been given check that it already exits
+            if newuser.username == "":
+                self.menu_output.delete(0.0, END)
+                self.menu_output.insert(END, "Please enter a username")
+            else: user_exists = username_correct(usernames,newuser.username)
+
+            if user_exists != -1: #username_correct routine will return -1 if the user does not exist
+
+                if newuser.password == "": #Checks the password has been entered
+                    self.menu_output.delete(0.0, END)
+                    self.menu_output.insert(END, "Please enter a password")
+
+                elif newuser.password2 == "": #Checks the second password has been entered
+                    self.menu_output.delete(0.0, END)
+                    self.menu_output.insert(END, "Please re-enter a password")
+
+                elif newuser.password != newuser.password2: #Checks the two passwords match
+                    self.menu_output.delete(0.0, END)
+                    self.menu_output.insert(END, "Please re-enter a password")
+                else:
+                    usernames[user_exists].change_password(newuser.password)# Calls the username objects method for changing passwords
+                    # I could call the routine SaveUsernamesDatabase to update the whole database, in this case I'm just updating the password field
+                    SQL = "UPDATE Usernames SET password = '%s' WHERE username = '%s' " % (newuser.password, newuser.username,) 
+                    print(SQL)
+                    c.execute(SQL) 
+                    Connection.commit()
+                    
+            else:
+                self.menu_output.delete(0.0, END)
+                self.menu_output.insert(END, "User doesn't exists")
 
     def deleteUser(self):
         messagebox.showinfo("Delete User", "Do you want to delete a user?")
 
     def showUser(self):
-        messagebox.showinfo("Delete User", "Do you want to show all users?")
+    	Data_Item = pull_stack()
+    	message = "The last user was " + str(Data_Item)
+    	messagebox.showinfo("Show User", message)
+
+    def loginUser(self):
+        message = "The last users were: \n"
+        StackMaximum,StackPointer = LoadStack()
+        print("StackMaximum3", StackMaximum)
+        print("StackPointer3", StackPointer)
+        print("StackArray3", StackArray)
+        
+        for i in range(StackPointer+1):
+            Data_Item = pull_stack()
+            message = message + str(Data_Item) + "\n"
+        messagebox.showinfo("Show User", message)
 
 
 class AddUserDialog(simpledialog.Dialog):
@@ -155,13 +209,31 @@ class AddUserDialog(simpledialog.Dialog):
         self.username = self.username_entry.get()
         self.password = self.password_entry.get()
         self.result = "success"
-           
+        
+class ChangeUserDialog(AddUserDialog):
+	
+    def body(self, master):
+        AddUserDialog.body(self,master)
+        Label(master, text="Re-enter Password:").grid(row=2)
+        self.password_re_entry = Entry(master)
+        self.password_re_entry.grid(row=2, column=1)
+
+    def apply(self):
+        self.username = self.username_entry.get()
+        self.password = self.password_entry.get()
+        self.password2 = self.password_re_entry.get()
+        self.result = "success"
+        
+        
 
 if __name__ == "__main__":
-
     #creates an instance of the mainWindow class
 ##    c.execute("DELETE FROM Usernames")
 ##    c.execute("INSERT INTO Usernames VALUES ('%s', '%s')" % ("123", "$Password1",))
     LoadUsernamesDatabase(usernames)
+    StackMaximum,StackPointer = LoadStack()
+    print("StackMaximum1", StackMaximum)
+    print("StackPointer1", StackPointer)
+    print("StackArray1", StackArray)
     window = loginWindow()
     mainloop()
