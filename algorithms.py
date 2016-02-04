@@ -27,7 +27,7 @@ def username_correct(usernames,username):
     return itemFound
 
 '''
-# Function to find out if the user has guessed pasword correctly:
+# Function to find out if the user has guessed password correctly:
 def is_correct(users_guess, users_password, usernames):
     validPassword = False
     for count in range (0 , len(usernames)):
@@ -59,14 +59,10 @@ def LoadUsernamesDatabase(usernames): #Loads usernames from database
         print(x.get_username(), x.password)
 
 
-def LoadAdminUsers( ):
-    SQL = "SELECT username FROM Usernames WHERE admin = True ORDER BY username"
+# def LoadAdminUsers( ):
+#     SQL = "SELECT username FROM Usernames WHERE admin = True ORDER BY username"
     
 
-
-
-
-    
 
 # Saves the usernames and passwords to the database table from the 2D usernames array **Not Used**     
 def SaveUsernamesDatabase(usernames): #Save usernames to database

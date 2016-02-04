@@ -130,9 +130,10 @@ class Username:
 
     #constructor
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, fullname):
         self.username = username
         self.password = password
+        self.fullname = fullname
    
         
     def get_username(self):
