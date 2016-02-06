@@ -108,28 +108,32 @@ class menuWindow:
 
     def addUser(self):
         newuser = AddUserDialog(self.root, title = "Add User")
-        
-        if newuser.result is not None: #In case cancel on dialog is pressed and no username or password is given
-            user_exists = username_correct(usernames,newuser.username)
 
+        if newuser.result is not None: #In case cancel on dialog is pressed and no username or password is given    
             if newuser.username == "":
+            	self.menu_output.delete(0.0, END)
+            	self.menu_output.insert(END, "Please enter a username")
+            elif not(length_check(newuser.username, 4) and type_check(newuser.username)):
+                print(length_check(newuser.username, 4), type_check(newuser.username))
                 self.menu_output.delete(0.0, END)
-                self.menu_output.insert(END, "Please enter a username")
-
-            elif user_exists == -1:
-
-                if newuser.password == "":
-                    self.menu_output.delete(0.0, END)
-                    self.menu_output.insert(END, "Please enter a password")
-                else:
-                    usernames.append(Username(newuser.username,newuser.password)) #update list
-                    SaveUsernamesDatabase(usernames) #update database
-                    BubbleSort(usernames)   #print list
-                    
+                self.menu_output.insert(END,"Invalid Username: Please try again")
             else:
-                self.menu_output.delete(0.0, END)
-                self.menu_output.insert(END, "User already exists")
-                
+                user_exists = username_correct(usernames,newuser.username)
+                if user_exists == -1:
+                    if newuser.password == "":
+                        self.menu_output.delete(0.0, END)
+                        self.menu_output.insert(END, "Please enter a password")
+                    elife RegularExpressions(newuser.password) == False:
+                        self.menu_output.delete(0.0, END)
+                        self.menu_output.insert(END, "Invalid Password: Please try again")
+                    else:
+                        usernames.append(Username(newuser.username,newuser.password,newuser.fullname)) #update list
+                        SaveUsernamesDatabase(usernames) #update database
+                        BubbleSort(usernames)   #print list
+                else:
+                    self.menu_output.delete(0.0, END)
+                    self.menu_output.insert(END, "User already exists")
+	                
             
     def changeUser(self):
         #This routine will update a users password, it uses a dialog box to get the username and two passwords
@@ -143,7 +147,8 @@ class menuWindow:
             if newuser.username == "":
                 self.menu_output.delete(0.0, END)
                 self.menu_output.insert(END, "Please enter a username")
-            else: user_exists = username_correct(usernames,newuser.username)
+            else:
+                user_exists = username_correct(usernames,newuser.username)
 
             if user_exists != -1: #username_correct routine will return -1 if the user does not exist
 
@@ -197,26 +202,42 @@ class AddUserDialog(simpledialog.Dialog):
 
         Label(master, text="Username:").grid(row=0)
         Label(master, text="Password:").grid(row=1)
-
+        Label(master, text="Full Name:").grid(row=2)
+		
         self.username_entry = Entry(master)
         self.password_entry = Entry(master)
+        self.fullname_entry = Entry(master)
 
         self.username_entry.grid(row=0, column=1)
         self.password_entry.grid(row=1, column=1)
+        self.fullname_entry.grid(row=2, column=1)
         return self.username_entry # initial focus
 
     def apply(self):
         self.username = self.username_entry.get()
         self.password = self.password_entry.get()
+        self.fullname = self.fullname_entry.get()
         self.result = "success"
         
-class ChangeUserDialog(AddUserDialog):
-	
+
+
+
+class ChangeUserDialog(simpledialog.Dialog):
+
     def body(self, master):
-        AddUserDialog.body(self,master)
+        Label(master, text="Username:").grid(row=0)
+        Label(master, text="Password:").grid(row=1)
         Label(master, text="Re-enter Password:").grid(row=2)
+
+        self.username_entry = Entry(master)
+        self.password_entry = Entry(master)
         self.password_re_entry = Entry(master)
+
+        self.username_entry.grid(row=0, column=1)
+        self.password_entry.grid(row=1, column=1)
         self.password_re_entry.grid(row=2, column=1)
+        
+        return self.username_entry # initial focus
 
     def apply(self):
         self.username = self.username_entry.get()

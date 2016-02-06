@@ -50,9 +50,9 @@ def LoadUsernamesDatabase(usernames): #Loads usernames from database
 
 # Load the usernames and passwords from the database table to array of objects
 def LoadUsernamesDatabase(usernames): #Loads usernames from database
-    SQL = "SELECT username,password FROM Usernames ORDER BY username"
+    SQL = "SELECT * FROM Usernames ORDER BY username"
     for row in c.execute(SQL):
-        usernames.append(Username(row[0],row[1]))
+        usernames.append(Username(row[0],row[1],row[2]))
     Connection.commit()
 # Print usernames
     for x in usernames:
@@ -68,9 +68,10 @@ def LoadUsernamesDatabase(usernames): #Loads usernames from database
 def SaveUsernamesDatabase(usernames): #Save usernames to database
     c.execute("DELETE FROM Usernames")
     for item in usernames:
-        username = item.username #Updated to access class atributes
+        username = item.username #Updated to access class attributes
         password = item.password
-        c.execute("INSERT INTO Usernames VALUES ('%s', '%s')" % (username, password))
+        fullname = item.fullname
+        c.execute("INSERT INTO Usernames VALUES ('%s', '%s','%s')" % (username, password, fullname))
         Connection.commit()
 
 """
