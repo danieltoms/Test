@@ -80,9 +80,8 @@ def push_stack(Data_Item):
     global StackPointer
 # Check there is room on the stack 	
     if StackPointer < StackMaximum:
-        StackPointer = StackPointer + 1
         StackArray[StackPointer] = Data_Item
-
+        StackPointer = StackPointer + 1
     else: print("Data not saved -- stack full")
     SaveStack()	
     
@@ -91,9 +90,9 @@ def pull_stack():
     global StackPointer # Check the stack is not empty
 
     if StackPointer >= 0:
+        StackPointer = StackPointer - 1 # Decrease stack pointer 
         DataItem = StackArray[StackPointer]
         print("SP",StackPointer,"DI",DataItem)
-        StackPointer = StackPointer - 1 # Decrease stack pointer 
         return DataItem
     else: print("There is no data to pop from the stack")
 

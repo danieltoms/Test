@@ -123,7 +123,7 @@ class menuWindow:
                     if newuser.password == "":
                         self.menu_output.delete(0.0, END)
                         self.menu_output.insert(END, "Please enter a password")
-                    elife RegularExpressions(newuser.password) == False:
+                    elif RegularExpressions(newuser.password) == False:
                         self.menu_output.delete(0.0, END)
                         self.menu_output.insert(END, "Invalid Password: Please try again")
                     else:
@@ -149,31 +149,32 @@ class menuWindow:
                 self.menu_output.insert(END, "Please enter a username")
             else:
                 user_exists = username_correct(usernames,newuser.username)
-
-            if user_exists != -1: #username_correct routine will return -1 if the user does not exist
-
-                if newuser.password == "": #Checks the password has been entered
-                    self.menu_output.delete(0.0, END)
-                    self.menu_output.insert(END, "Please enter a password")
-
-                elif newuser.password2 == "": #Checks the second password has been entered
-                    self.menu_output.delete(0.0, END)
-                    self.menu_output.insert(END, "Please re-enter a password")
-
-                elif newuser.password != newuser.password2: #Checks the two passwords match
-                    self.menu_output.delete(0.0, END)
-                    self.menu_output.insert(END, "Please re-enter a password")
-                else:
-                    usernames[user_exists].change_password(newuser.password)# Calls the username objects method for changing passwords
+                
+                if user_exists != -1: #username_correct routine will return -1 if the user does not exist
+    
+                    if newuser.password == "" or newuser.password2 == "": #Checks the password has been entered
+                        self.menu_output.delete(0.0, END)
+                        self.menu_output.insert(END, "Please enter your new password twice")
+                    elif newuser.password != newuser.password2: #Checks the two passwords match
+                        self.menu_output.delete(0.0, END)
+                        self.menu_output.insert(END, "Passwords don't match")
+                    elif RegularExpressions(newuser.password) == False or RegularExpressions(newuser.password2) == False:
+                        self.menu_output.delete(0.0, END)
+                        self.menu_output.insert(END, "Invalid Password")            
+                    else:
+                        usernames[user_exists].change_password(newuser.password)# Calls the username objects method for changing passwords
                     # I could call the routine SaveUsernamesDatabase to update the whole database, in this case I'm just updating the password field
-                    SQL = "UPDATE Usernames SET password = '%s' WHERE username = '%s' " % (newuser.password, newuser.username,) 
-                    print(SQL)
-                    c.execute(SQL) 
-                    Connection.commit()
-                    
-            else:
-                self.menu_output.delete(0.0, END)
-                self.menu_output.insert(END, "User doesn't exists")
+                        SQL = "UPDATE Usernames SET password = '%s' WHERE username = '%s' " % (newuser.password, newuser.username,) 
+                        print(SQL)
+                        c.execute(SQL) 
+                        Connection.commit()
+                        
+                        self.menu_output.delete(0.0, END)
+                        self.menu_output.insert(END, "Please choose an option:")        
+                
+                else:
+                    self.menu_output.delete(0.0, END)
+                    self.menu_output.insert(END, "User doesn't exists")
 
     def deleteUser(self):
         messagebox.showinfo("Delete User", "Do you want to delete a user?")
@@ -190,7 +191,7 @@ class menuWindow:
         print("StackPointer3", StackPointer)
         print("StackArray3", StackArray)
         
-        for i in range(StackPointer+1):
+        for i in range(1, StackPointer+1):
             Data_Item = pull_stack()
             message = message + str(Data_Item) + "\n"
         messagebox.showinfo("Show User", message)
