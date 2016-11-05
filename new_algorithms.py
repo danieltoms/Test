@@ -45,7 +45,8 @@ def quicksort(array):
             for x in array:
                 if x.get_username() < pivot:
                     less.append(x)
-#                   printarray("less", less)
+#                   printarray("
+less", less)
                 elif x.get_username() == pivot:
                     equal.append(x)
 #                    printarray("equal", equal)
