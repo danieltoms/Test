@@ -246,6 +246,7 @@ if __name__ == "__main__":
         Choice = GetMenuChoice()
         if Choice == '1':
             AddNewUser(usernames)
+            print("cool")
         elif Choice == '2':
             ChangeUserPassword(usernames)
         elif Choice == '3':
